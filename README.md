@@ -9,8 +9,8 @@
 - `pip install PyPDF2`
 
 ## Obtaining Gmail credentials
-- Enable Two-factor authentication in [myaccount.google.com/security](myaccount.google.com/security)
-- Generate a new password for the app in [myaccount.google.com/apppasswords](myaccount.google.com/apppasswords)
+- Enable Two-factor authentication in [myaccount.google.com/security](https://myaccount.google.com/security)
+- Generate a new password for the app in [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords)
 
 ## Running the server
 - Configure the sender email and password with `SENDER` and `PASS` environment variables, using `set` or `export` in your terminal.

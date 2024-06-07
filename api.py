@@ -17,17 +17,17 @@ def home():
 
 @app.route('/upload', methods=['POST'])
 def upload():
-    if not request.files.get('file', None): return jsonify({'error': 'Missing file field'}), 400
+    if not request.files.get('file', None): return jsonify({'success': False, 'error': 'Missing file field'}), 400
     file = request.files['file']
-    if (file.filename.rsplit('.', 1)[1].lower() != "pdf"): return jsonify({'error': 'File is not .pdf'}), 400
+    if (file.filename.rsplit('.', 1)[1].lower() != "pdf"): return jsonify({'success': False, 'error': 'File is not .pdf'}), 400
     to = request.form.get("email")
-    if not to: return jsonify({'error': 'Missing email field'}), 400
+    if not to: return jsonify({'success': False, 'error': 'Missing email field'}), 400
     
     title = "Here is a preview of the file: \n\n"
     body = title + extract_pdf_30(file)
     
     send_email(body, to)
-    return jsonify({'message': body})
+    return jsonify({'success': True, 'message': f"The email has been successfully sent to {to}", 'debug': body})
 
 
 def extract_pdf_30(file):
