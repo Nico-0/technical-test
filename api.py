@@ -26,8 +26,8 @@ def upload():
     title = "Here is a preview of the file: \n\n"
     body = title + extract_pdf_30(file)
     
-    send_email(body, to)
-    return jsonify({'success': True, 'message': f"The email has been successfully sent to {to}", 'debug': body})
+    response = send_email(body, to)
+    return response
 
 
 def extract_pdf_30(file):
@@ -54,9 +54,17 @@ def send_email(body, to):
     em.set_content(body)
     
     context = ssl.create_default_context()
-    with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
-        smtp.login(em['From'], password)
-        smtp.sendmail(em['From'], em['To'], em.as_string())
+    try:
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+            smtp.login(em['From'], password)
+            smtp.sendmail(em['From'], em['To'], em.as_string())
+        return jsonify({'success': True, 'message': f"The email has been successfully sent to {to}", 'debug': body})
+    except smtplib.SMTPAuthenticationError as e:
+        print(f"Please restart the app and update credentials. Failed to authenticate with the SMTP server: {e}")
+        return jsonify({'success': False, 'error': "bad credentials"})
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return jsonify({'success': False, 'error': repr(e)})
 
 if __name__ == '__main__':
     app.run()#debug=True)
